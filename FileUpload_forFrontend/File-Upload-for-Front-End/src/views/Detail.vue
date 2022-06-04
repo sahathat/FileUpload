@@ -28,9 +28,14 @@ let deleteUser = async () => {
     let res = await fetch("http://localhost:8080/api/users/" + params.id, {
       method: "DELETE",
     });
+
     if (res.status === 200) {
+      if(user.value.image !== "")
+      res = await fetch(user.value.image, {
+        method: "DELETE",
+      });
+      console.log("id " + params.id + " delete success");
       appRouter.push({ name: "Home" });
-      console.log("id " + id + " delete success");
     } else {
       console.log("error by status " + res.status);
     }
@@ -41,6 +46,7 @@ let deleteUser = async () => {
 <template>
   <div>
     <h1>User Detail</h1>
+    <img v-if="user.image != ''" :src="user.image" width="400" height="400" />
     <p>Name: {{ user.name }}</p>
     <p>Credit: {{ user.credit }}</p>
     <button @click="deleteUser">delete</button> <br />
